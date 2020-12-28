@@ -6,14 +6,17 @@ import time
 from selenium.webdriver import Safari
 from bs4 import BeautifulSoup
 
+dir = os.getcwd()
+
 # Function that writes input to a text file
 def stringToTxtFile(data,filename,directory):
-    dir = directory
-    if os.path.exists(dir):
-        os.chdir(dir)
+    global dir
+    newDir = os.path.join(dir,directory)
+    if os.path.exists(newDir):
+        os.chdir(newDir)
     else:
-        os.mkdir(dir)
-        os.chdir(dir)
+        os.mkdir(newDir)
+        os.chdir(newDir)
     print("Now saving in: ", os.getcwd())
     datafile = open("{a}.txt".format(a=filename),'w')
     datafile.write(data)
