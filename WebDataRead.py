@@ -29,7 +29,7 @@ def stringToTxtFile(data,filename,directory='textfiles'):
         os.mkdir(newDir)
         os.chdir(newDir)
     print("Now saving in: ", os.getcwd())
-    datafile = open("{a}.txt".format(a=filename),'w')
+    datafile = open(f"{filename}.txt",'w')
     datafile.write(data)
     datafile.close()
     os.chdir('..')
