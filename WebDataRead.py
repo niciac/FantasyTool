@@ -1,8 +1,6 @@
 # Importing Required Libraries
 import os
-import csv
 from datetime import date
-import re
 from selenium.webdriver import Safari
 from bs4 import BeautifulSoup
 
