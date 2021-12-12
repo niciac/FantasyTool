@@ -22,7 +22,7 @@ teams_df = pd.DataFrame(json['teams'])
 x = date.today()
 day, month, year = x.day, x.month, x.year
 
-dated_filename = f'{year}-{month}-{day+1}.csv'
+dated_filename = f'{year}-{month}-{day}.csv'
 if path(f"./Data/{dated_filename}").exists():
     raise IOError("File already exists")
 else:
