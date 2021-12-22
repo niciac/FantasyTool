@@ -3,7 +3,6 @@
 
 import requests
 import pandas as pd
-import numpy as np
 from datetime import date
 from pathlib import Path as path
 
@@ -16,13 +15,13 @@ request = requests.get(url)
 json = request.json()
 
 elements_df = pd.DataFrame(json['elements'])
-elements_types_df = pd.DataFrame(json['element_types'])
-teams_df = pd.DataFrame(json['teams'])
+# elements_types_df = pd.DataFrame(json['element_types'])
+# teams_df = pd.DataFrame(json['teams'])
 
 x = date.today()
 day, month, year = x.day, x.month, x.year
 
-dated_filename = f'{year}-{month}-{day}.csv'
+dated_filename = f'elements_{year}-{month}-{day}.csv'
 if path(f"./Data/{dated_filename}").exists():
     raise IOError("File already exists")
 else:
