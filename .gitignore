@@ -171,7 +171,7 @@ dmypy.json
 # profiling data
 .prof
 
-# Directory created by code
+# Custom directories
 textfiles
 bin
 .vscode
