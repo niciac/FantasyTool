@@ -173,7 +173,7 @@ dmypy.json
 
 # Custom directories
 textfiles
-bin
+fantasy_env
 .vscode
 Data
 personal_config.yml
