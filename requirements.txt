@@ -1,4 +1,12 @@
 beautifulsoup4==4.9.3
+certifi==2020.12.5
+chardet==4.0.0
+idna==2.10
+jupyter==1.0.0
+jupyter-console==6.4.0
+qtconsole==5.1.1
+QtPy==1.9.0
+requests==2.25.1
 selenium==3.141.0
 soupsieve==2.1
 urllib3==1.26.2
