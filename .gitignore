@@ -177,5 +177,6 @@ bin
 .vscode
 Data
 personal_config.yml
+elements_df_EDA.ipynb
 
 # End of https://www.toptal.com/developers/gitignore/api/python,macos
