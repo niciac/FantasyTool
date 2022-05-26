@@ -6,11 +6,9 @@ from datetime import date
 import json
 from pathlib import Path as path
 import requests
+import yaml
 
 # API urls
-general_information_url = 'https://fantasy.premierleague.com/api/bootstrap-static/'
-
-fixtures_url = 'https://fantasy.premierleague.com/api/fixtures/'
 fixtures_url_parameters_future = {'all':0,'future':1}
 gw_number = 0
 fixtures_url_parameters_gw = {'gw':gw_number}
@@ -30,8 +28,15 @@ classic_league_id = 409748
 classic_league_standings = f'https://fantasy.premierleague.com/api/leagues-classic/{classic_league_id}/standings'
 # for big public leagues - may need "standings?page_standings=2" at the end to reach second page of standings
 
-# import configuration from ini file
-def get_login_info(config_file_path:path=path('personal_config.ini')) -> dict:
+class URL():
+    pass
+
+def get_login_info_ini(config_file_path:path=path('personal_config.ini')) -> dict:
+
+    '''Retrieves the login information stored in the configuration file
+    saved in the same directory or custom directory if provided and 
+    returns them in dictionary format'''
+    
     config = ConfigParser()
     config.read(config_file_path)
     
@@ -40,18 +45,51 @@ def get_login_info(config_file_path:path=path('personal_config.ini')) -> dict:
 
     return {'login_email':login_email,'password':password}
 
-def get_url(config_file_path:path=path('personal_config.ini')):
+def get_login_info_yaml(config_file_path:path=path('personal_config.yml')):# -> dict:
+    print(yaml.safe_load(str(config_file_path)))
+    with open(config_file_path) as config_file:
+        config = yaml.safe_load(config_file)
+    print(config['url']['main_endpoint_url']+config['url']['general_information_endpoint_path'])
+    print(config['login_info']['login_email'])
+    return 0
+
+# get_login_info_yaml('config.yml')
+get_login_info_yaml()
+
+def requires_completion(string:str)->bool:
+    
+    '''Checks if the configuration string requires a completion 
+    from the completion section of the configuration file.'''
+    
+    for char in string:
+        if char == '{':
+            opening = True
+        elif char == '}':
+            closing = True
+        else:
+            continue
+    return opening and closing
+
+def get_urls(config_file_path:path=path('personal_config.ini')):
     config = ConfigParser()
     config.read(config_file_path)
     
     main_endpoint_url = config.get('URL','MAIN_ENDPOINT_URL')
     general_information_endpoint_path = config.get('URL','GENERAL_INFORMATION_ENDPOINT_PATH')
+    fixtures_url_endpoint_path = config.get('URL','FIXTURES_URL_ENDPOINT_PATH')
+    player_detailed_data_endpoint_path = config.get('URL','player_detailed_data_endpoint_path')
+    element_id = config.get('URL_COMPLETION_VALUES','ELEMENT_ID')
 
-    general_information_url = main_endpoint_url + general_information_endpoint_path
-    return general_information_url
+    # requested_url = main_endpoint_url + fixtures_url_endpoint_path.format(event=1)
+    # requested_url = list(config.get('URL_COMPLETION_VALUES','list'))
+    requested_url = main_endpoint_url + general_information_endpoint_path
+    return requested_url
+
+# print(get_urls())
+
 
 # Authenticated Access
-def API_authentication(login_email:str=get_login_info()['login_email'], password:str=get_login_info()['password'], fpl_manager_id:str=fpl_manager_id):
+def API_authentication(login_email:str=get_login_info_ini()['login_email'], password:str=get_login_info_ini()['password'], fpl_manager_id:str=fpl_manager_id):
     session = requests.session()
     
     url = 'https://users.premierleague.com/accounts/login/'
@@ -73,10 +111,11 @@ def API_authentication(login_email:str=get_login_info()['login_email'], password
 # get API data withour authentication
 def API_request_without_authentication():
     # Use requests to get request from API
-    request = requests.get(get_url())
+    request = requests.get(get_urls())
     data_nested_dict = request.json()
     return data_nested_dict
 
+# save downloaded data to json format
 def save_dated_json_file(data_nested_dict = API_request_without_authentication()):
     x = date.today()
     day, month, year = x.day, x.month, x.year
@@ -88,11 +127,18 @@ def save_dated_json_file(data_nested_dict = API_request_without_authentication()
     else:
         output_file = open(json_output_file_path,'w')
         json.dump(data_nested_dict,output_file, indent=4)
+        
         output_file.close()
 
-# print(get_login_info())
+def user_input():
+    data = input('Enter choices, separated by spaces:\n')
+    print(*data.split(' '))
 
-save_dated_json_file()
+# user_input()
+# print(get_login_info_ini())
+
+if __name__ == "__main__":
+    save_dated_json_file()
 
 # information about endpoints found in the below article
 # https://medium.com/@frenzelts/fantasy-premier-league-api-endpoints-a-detailed-guide-acbd5598eb19

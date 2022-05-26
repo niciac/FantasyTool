@@ -176,5 +176,6 @@ textfiles
 bin
 .vscode
 Data
+personal_config.yml
 
 # End of https://www.toptal.com/developers/gitignore/api/python,macos
