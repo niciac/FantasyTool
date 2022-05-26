@@ -1,0 +1,17 @@
+login_info:
+  login_email: 
+  password: 
+
+url:
+  main_endpoint_url: https://fantasy.premierleague.com/api/
+  general_information_endpoint_path: bootstrap-static/
+  fixtures_url_endpoint_path: fixtures?event:{event}
+  player_detailed_data_endpoint_path:  element-summary/{element_id}/
+  live_gw_data_endpoint_path: event/{event_id}/live/
+
+url_completion_values:
+  list: 12
+  element_id: 4
+  event_id: 1
+  fpl_manager_id: 
+  classic_league_id: 
