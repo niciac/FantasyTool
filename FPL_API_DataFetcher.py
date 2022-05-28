@@ -1,4 +1,4 @@
-# Based on the notebook tutorial
+# Based on the notebook examples
 # Written as script to run in command line
 
 from configparser import ConfigParser
@@ -45,13 +45,15 @@ def get_login_info_ini(config_file_path:path=path('personal_config.ini')) -> dic
 
     return {'login_email':login_email,'password':password}
 
-def get_login_info_yaml(config_file_path:path=path('personal_config.yml')):# -> dict:
+def get_login_info_yaml(config_file_path:path=path('personal_config.yml')) -> dict:
     print(yaml.safe_load(str(config_file_path)))
     with open(config_file_path) as config_file:
         config = yaml.safe_load(config_file)
     print(config['url']['main_endpoint_url']+config['url']['general_information_endpoint_path'])
     print(config['login_info']['login_email'])
-    return 0
+    login_email = config['login_info']['login_email']
+    password = config['login_info']['password']
+    return {'login_email':login_email,'password':password}
 
 # get_login_info_yaml('config.yml')
 get_login_info_yaml()
@@ -70,7 +72,7 @@ def requires_completion(string:str)->bool:
             continue
     return opening and closing
 
-def get_urls(config_file_path:path=path('personal_config.ini')):
+def get_urls(config_file_path:path=path('personal_config.yaml')):
     config = ConfigParser()
     config.read(config_file_path)
     
@@ -89,7 +91,7 @@ def get_urls(config_file_path:path=path('personal_config.ini')):
 
 
 # Authenticated Access
-def API_authentication(login_email:str=get_login_info_ini()['login_email'], password:str=get_login_info_ini()['password'], fpl_manager_id:str=fpl_manager_id):
+def API_authentication(login_email:str=get_login_info_yaml()['login_email'], password:str=get_login_info_yaml()['password'], fpl_manager_id:str=fpl_manager_id):
     session = requests.session()
     
     url = 'https://users.premierleague.com/accounts/login/'
