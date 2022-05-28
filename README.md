@@ -28,7 +28,7 @@
 ### Endpoint URL: https://fantasy.premierleague.com/api/event/{event_id}/live/
 #### Returns a list of a player's information in a specified gameweek.
 ### Sections:
-* #### **id**: Refers to the element id from bootstrap-statis data.
+* #### **id**: Refers to the element id from bootstrap-static data.
 * #### **stats**: A player's match stats for the specific gameweek.
 * #### **explain**: Breakdown of a player's points for the specific gameweek.
 
