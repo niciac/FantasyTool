@@ -8,22 +8,9 @@ from pathlib import Path as path
 import requests
 import yaml
 
+
 class URL():
     pass
-
-def get_login_info_ini(config_file_path:path=path('personal_config.ini')) -> dict:
-
-    '''Retrieves the login information stored in the configuration file
-    saved in the same directory or custom directory if provided and 
-    returns them in dictionary format'''
-    
-    config = ConfigParser()
-    config.read(config_file_path)
-    
-    login_email = config.get('LOGIN_INFO','LOGIN_EMAIL')
-    password = config.get('LOGIN_INFO','PASSWORD')
-
-    return {'login_email':login_email,'password':password}
 
 def get_login_info_yaml(config_file_path:path=path('personal_config.yml')) -> dict:
     print(yaml.safe_load(str(config_file_path)))
