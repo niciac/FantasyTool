@@ -1,29 +1,13 @@
 # Based on the notebook examples
 # Written as script to run in command line
 
-from configparser import ConfigParser
 from datetime import date
 import json
 from pathlib import Path as path
 import requests
-import yaml
-
 
 class URL():
     pass
-
-def get_login_info_yaml(config_file_path:path=path('personal_config.yml')) -> dict:
-    print(yaml.safe_load(str(config_file_path)))
-    with open(config_file_path) as config_file:
-        config = yaml.safe_load(config_file)
-    print(config['url']['main_endpoint_url']+config['url']['general_information_endpoint_path'])
-    print(config['login_info']['login_email'])
-    login_email = config['login_info']['login_email']
-    password = config['login_info']['password']
-    return {'login_email':login_email,'password':password}
-
-# get_login_info_yaml('config.yml')
-get_login_info_yaml()
 
 def requires_completion(string:str)->bool:
     
