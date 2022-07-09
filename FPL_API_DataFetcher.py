@@ -8,26 +8,6 @@ from pathlib import Path as path
 import requests
 import yaml
 
-# API urls
-fixtures_url_parameters_future = {'all':0,'future':1}
-gw_number = 0
-fixtures_url_parameters_gw = {'gw':gw_number}
-
-element_id = 4
-player_detailed_data_url = f'https://fantasy.premierleague.com/api/element-summary/{element_id}/'
-
-event_id = 1
-live_gw_data = f'https://fantasy.premierleague.com/api/event/{event_id}/live/'
-
-fpl_manager_id = 33014041
-fpl_manager_basic_information = f'https://fantasy.premierleague.com/api/entry/{fpl_manager_id}/'
-
-fpl_manager_history = f'https://fantasy.premierleague.com/api/entry/{fpl_manager_id}/history'
-
-classic_league_id = 409748
-classic_league_standings = f'https://fantasy.premierleague.com/api/leagues-classic/{classic_league_id}/standings'
-# for big public leagues - may need "standings?page_standings=2" at the end to reach second page of standings
-
 class URL():
     pass
 

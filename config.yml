@@ -8,6 +8,9 @@ url:
   fixtures_url_endpoint_path: fixtures?event:{event}
   player_detailed_data_endpoint_path:  element-summary/{element_id}/
   live_gw_data_endpoint_path: event/{event_id}/live/
+  fpl_manager_basic_information: entry/{fpl_manager_id}/
+  fpl_manager_history: entry/{fpl_manager_id}/history
+  classic_league_standings: leagues-classic/{classic_league_id}/standings
 
 url_completion_values:
   list: 12
@@ -15,3 +18,10 @@ url_completion_values:
   event_id: 1
   fpl_manager_id: 
   classic_league_id: 
+
+fixtures_url_parameters:
+  all: 0
+  future: 1
+  gw: None # Can specify GW number - implement in code 
+
+# for big public leagues - may need "standings?page_standings=2" at the end to reach second page of standings
