@@ -3,14 +3,38 @@ login_info:
   password: 
 
 url:
-  main_endpoint_url: https://fantasy.premierleague.com/api/
-  general_information_endpoint_path: bootstrap-static/
-  fixtures_url_endpoint_path: fixtures?event:{event}
-  player_detailed_data_endpoint_path:  element-summary/{element_id}/
-  live_gw_data_endpoint_path: event/{event_id}/live/
-  fpl_manager_basic_information: entry/{fpl_manager_id}/
-  fpl_manager_history: entry/{fpl_manager_id}/history
-  classic_league_standings: leagues-classic/{classic_league_id}/standings
+  main_endpoint_url: 
+    required: True
+    link: https://fantasy.premierleague.com/api/
+    complete: True
+  general_information_endpoint_path:
+    required: True
+    link: bootstrap-static/
+    complete: True
+  fixtures_url_endpoint_path:
+    required: True
+    link: fixtures?event:{event}
+    complete: False
+  player_detailed_data_endpoint_path:
+    required: True
+    link: element-summary/{element_id}/
+    complete: False
+  live_gw_data_endpoint_path:
+    required: True
+    link: event/{event_id}/live/
+    complete: False
+  fpl_manager_basic_information:
+    required: True
+    link: entry/{fpl_manager_id}/
+    complete: False
+  fpl_manager_history:
+    required: True
+    link: entry/{fpl_manager_id}/history
+    complete: Falsee
+  classic_league_standings:
+    required: True
+    link: eagues-classic/{classic_league_id}/standings
+    complete: False
 
 url_completion_values:
   list: 12
@@ -18,10 +42,9 @@ url_completion_values:
   event_id: 1
   fpl_manager_id: 
   classic_league_id: 
-
-fixtures_url_parameters:
-  all: 0
-  future: 1
-  gw: None # Can specify GW number - implement in code 
+  fixtures_url_parameters:
+    all: 0
+    future: 1
+    gw: None # Can specify GW number - implement in code 
 
 # for big public leagues - may need "standings?page_standings=2" at the end to reach second page of standings
