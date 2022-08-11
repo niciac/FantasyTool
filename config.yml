@@ -30,7 +30,7 @@ url:
   fpl_manager_history:
     required: True
     link: entry/{fpl_manager_id}/history
-    complete: Falsee
+    complete: False
   classic_league_standings:
     required: True
     link: eagues-classic/{classic_league_id}/standings
