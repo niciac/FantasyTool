@@ -18,7 +18,6 @@ projectDir = os.getcwd()
 
 # Function that writes string input to a text file
 def stringToTxtFile(data,filename,directory='textfiles'):
-    global projectDir
     newDir = os.path.join(projectDir,directory)
     if os.path.exists(newDir):
         os.chdir(newDir)
