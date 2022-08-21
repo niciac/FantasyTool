@@ -33,7 +33,7 @@ url:
     complete: False
   classic_league_standings:
     required: True
-    link: eagues-classic/{classic_league_id}/standings
+    link: leagues-classic/{classic_league_id}/standings
     complete: False
 
 url_completion_values:
