@@ -177,6 +177,6 @@ fantasy_env
 .vscode
 Data
 personal_config.yml
-elements_df_EDA.ipynb
+datapath.yml
 
 # End of https://www.toptal.com/developers/gitignore/api/python,macos
