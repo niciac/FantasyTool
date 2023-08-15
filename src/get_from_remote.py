@@ -48,7 +48,7 @@ class SFTP:
         for attr in self.connection.listdir_attr(remote_path):
             yield attr
     
-    def delete_all_from_remote(self, remote_path):
+    def delete_all_from_remote(self, remote_path:str|path):
         count=0
         for file in self.listdir_attr(remote_path):
             self.connection.remove(str(path(remote_path,file.filename)))
@@ -67,7 +67,7 @@ class SFTP:
         for file in self.connection.listdir_attr(remote_path):
             logger.debug(f"Checking {file.filename}")
             if path(local_path, file.filename).exists:
-                self.delete_all_from_remote(remote_path)
+                self.delete_file_from_remote(remote_path)
                 count+=1
         if count==0:
             logger.info(f"No duplicates found on {self.hostname}")
@@ -82,7 +82,7 @@ class SFTP:
 
         try:
             logger.info(f"Downloading from {self.hostname} as {self.username}")
-            logger.info(f"remote path : {remote_path}")
+            logger.info(f"remote path: {remote_path}")
             logger.info(f"local path: {local_path}")
 
             # Create the target directory if it does not exist
@@ -96,9 +96,6 @@ class SFTP:
             count=0
             for obj in self.connection.listdir_attr(remote_path):
                 if path(local_path, obj.filename).exists():
-                    # logger.debug(f"{obj.filename} already downloaded.")
-                    if delete:
-                        self.delete_file_from_remote(path(remote_path,obj.filename))
                     continue
                 else:
                     self.connection.get(
@@ -106,6 +103,8 @@ class SFTP:
                         str(path(local_path, obj.filename)),
                     )
                     logger.debug(f"{obj.filename} downloaded successfully!")
+                    if delete:
+                        self.delete_file_from_remote(path(remote_path,obj.filename))
                     count+=1
 
             if count>=1:
@@ -138,7 +137,8 @@ def menu(options):
     for count, option in enumerate(options):
         print(f"{count+1}.{option}")
     print("\n",30*"=")
-    selection = int(input("\nSelect one option:"))-1
+    logger.info("Select option: ")
+    selection = int(input())-1
     logger.info(f"Selected: {options[selection]}")
     return options[selection]
         
@@ -153,7 +153,7 @@ if __name__ == "__main__":
     logger.info(" NEW LOG ".center(20, "="))
 
     try:
-        with open("personal_configa.yml") as config:
+        with open("personal_config.yml") as config:
             data_collection = yaml.safe_load(config)["data_collection"]
             logger.debug(f"Collected the following info: {data_collection}")
             sftp_url, remote_path, local_path = data_collection.values()
@@ -172,18 +172,18 @@ if __name__ == "__main__":
     # Connect to SFTP
     sftp.connect()
 
-    options = ['download','download & delete','delete duplicates','delete','exit']
+    options = ['download','download & delete','delete duplicates','delete all from remote','exit']
 
     while True:
         match menu(options):
             case 'download':
                 sftp.download(remote_path, local_path, delete=False)
-            case 'delete':
-                sftp.delete_all_from_remote(remote_path)
-            case 'delete duplicates':
-                sftp.delete_duplicates(remote_path, local_path)
             case 'download & delete':
                 sftp.download(remote_path, local_path, delete=True)
+            case 'delete duplicates':
+                sftp.delete_duplicates(remote_path, local_path)
+            case 'delete all from remote':
+                sftp.delete_all_from_remote(remote_path)
             case 'exit':
                 sftp.disconnect()
                 sys.exit()
