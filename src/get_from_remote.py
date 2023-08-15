@@ -172,13 +172,13 @@ if __name__ == "__main__":
     # Connect to SFTP
     sftp.connect()
 
-    options = ['download','download & delete','delete duplicates','delete all from remote','exit']
+    options = ['download','download & delete from remote','delete duplicates','delete all from remote','exit']
 
     while True:
         match menu(options):
             case 'download':
                 sftp.download(remote_path, local_path, delete=False)
-            case 'download & delete':
+            case 'download & delete from remote':
                 sftp.download(remote_path, local_path, delete=True)
             case 'delete duplicates':
                 sftp.delete_duplicates(remote_path, local_path)
