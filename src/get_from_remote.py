@@ -48,7 +48,7 @@ class SFTP:
         for attr in self.connection.listdir_attr(remote_path):
             yield attr
     
-    def delete_from_remote(self, remote_path):
+    def delete_all_from_remote(self, remote_path):
         count=0
         for file in self.listdir_attr(remote_path):
             self.connection.remove(str(path(remote_path,file.filename)))
@@ -58,19 +58,23 @@ class SFTP:
             logger.info(f"No files found on {self.hostname}")
         logger.info(f"{count} {'file' if count==1 else 'files'} deleted from {self.hostname}")
 
+    def delete_file_from_remote(self, remote_file_path):
+        self.connection.remove(str(remote_file_path))
+        logger.info(f"{remote_file_path} deleted from remote.")
+
     def delete_duplicates(self, remote_path, local_path):
         count=0
         for file in self.connection.listdir_attr(remote_path):
             logger.debug(f"Checking {file.filename}")
             if path(local_path, file.filename).exists:
-                self.delete_from_remote(remote_path)
+                self.delete_all_from_remote(remote_path)
                 count+=1
         if count==0:
             logger.info(f"No duplicates found on {self.hostname}")
         logger.info(f"{count} {'file' if count==1 else 'files'} deleted from {self.hostname}")
 
 
-    def download(self, remote_path, local_path, delete=False):
+    def download(self, remote_path:str|path, local_path:str|path, /, delete:bool=False):
         """
         Downloads the file from remote sftp server to local.
         Also, by default extracts the file to the specified local_path
@@ -82,9 +86,9 @@ class SFTP:
             logger.info(f"local path: {local_path}")
 
             # Create the target directory if it does not exist
-            local_path = path(local_path)
+            if not isinstance(local_path,path):
+                local_path = path(local_path)
             if not (local_path.exists() and local_path.is_dir()):
-                logger.debug(f"{local_path} does not exist. Creating...")
                 local_path.mkdir(parents=True)
                 logger.info(f"{local_path} successfully created.")
 
@@ -93,6 +97,8 @@ class SFTP:
             for obj in self.connection.listdir_attr(remote_path):
                 if path(local_path, obj.filename).exists():
                     # logger.debug(f"{obj.filename} already downloaded.")
+                    if delete:
+                        self.delete_file_from_remote(path(remote_path,obj.filename))
                     continue
                 else:
                     self.connection.get(
@@ -106,9 +112,6 @@ class SFTP:
                 logger.info(f"{count} {'file' if count==1 else 'files'} downloaded from {self.hostname}")
             else:
                 logger.info("No files downloaded")
-
-            if delete:
-                self.delete_from_remote(remote_path)
 
         except Exception as err:
             raise Exception(err)
@@ -142,7 +145,6 @@ def menu(options):
 
 
 if __name__ == "__main__":
-    global logger
 
     logger = MyLogger("SFTP", level="DEBUG")
     logger.add_file_handler(filename="log.log")
@@ -150,16 +152,13 @@ if __name__ == "__main__":
 
     logger.info(" NEW LOG ".center(20, "="))
 
-    with open("personal_config.yml") as config:
-        data_collection = yaml.safe_load(config)["data_collection"]
-        logger.debug(f"Collected the following info: {data_collection}")
-
-    sftp_url, remote_path, local_path = data_collection.values()
-
-    if not sftp_url:
-        logger.info(
-            "Could not find configuration. Please set configuration variable sftp_url and try again."
-        )
+    try:
+        with open("personal_configa.yml") as config:
+            data_collection = yaml.safe_load(config)["data_collection"]
+            logger.debug(f"Collected the following info: {data_collection}")
+            sftp_url, remote_path, local_path = data_collection.values()
+    except Exception as e:
+        logger.error(e)
         sys.exit()
 
     parsed_url = urlparse(sftp_url)
@@ -180,7 +179,7 @@ if __name__ == "__main__":
             case 'download':
                 sftp.download(remote_path, local_path, delete=False)
             case 'delete':
-                sftp.delete_from_remote(remote_path)
+                sftp.delete_all_from_remote(remote_path)
             case 'delete duplicates':
                 sftp.delete_duplicates(remote_path, local_path)
             case 'download & delete':
