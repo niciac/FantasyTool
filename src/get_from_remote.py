@@ -40,8 +40,9 @@ class SFTP:
 
     def listdir(self, remote_path):
         """lists all the files and directories in the specified path and returns them"""
+        print('\nAvailable file: ')
         for obj in self.connection.listdir(remote_path):
-            yield obj
+            print(obj)
 
     def listdir_attr(self, remote_path):
         """lists all the files and directories (with their attributes) in the specified path and returns them"""
@@ -172,10 +173,12 @@ if __name__ == "__main__":
     # Connect to SFTP
     sftp.connect()
 
-    options = ['download','download & delete from remote','delete duplicates','delete all from remote','exit']
+    options = ['list available files', 'download','download & delete from remote','delete duplicates','delete all from remote','exit']
 
     while True:
         match menu(options):
+            case 'list available files':
+                sftp.listdir(remote_path)
             case 'download':
                 sftp.download(remote_path, local_path, delete=False)
             case 'download & delete from remote':
